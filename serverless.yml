@@ -1,0 +1,22 @@
+service: custom-metrics
+provider:
+  name: aws
+  runtime: python3.10
+  region: ap-northeast-1
+  iam:
+    role:
+      statements:
+        - Effect: Allow
+          Action:
+            - "ssm:SendCommand"
+            - "ssm:ListCommands"
+            - "ssm:DescribeCommands"
+            - "ssm:GetCommandInvocation"
+          Resource:
+            - "*"
+
+functions:
+  runCommandFunction:
+    handler: handler.lambda_handler
+    events:
+      - schedule: rate(1 minute)
